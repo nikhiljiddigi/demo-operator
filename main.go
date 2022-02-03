@@ -18,6 +18,8 @@ package main
 
 import (
 	"os"
+	"log"
+	"flag"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -45,11 +47,13 @@ func init() {
 }
 
 func main() {
-
+        var metricsAddr string
+        flag.StringVar(&metricsAddr, "metrics-bind-address", ":8082", "The address the metric endpoint binds to.")
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme: scheme,
 	})
 	if err != nil {
+		log.Println (err, "unable to start manager")
 		setupLog.Error(err, "unable to start manager")
 		os.Exit(1)
 	}
